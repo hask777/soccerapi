@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 
-class AreasController extends Controller
+class CompetitionController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -14,16 +14,26 @@ class AreasController extends Controller
      */
     public function index()
     {
-        $req = 'https://api.sportsdata.io/v3/soccer/scores/json/Areas';
+
+        $req1 = 'https://api.sportsdata.io/v3/soccer/scores/json/Areas';
+        $header1= 'f7b0c7419d204f299f59e646b45ca563';
+
+        $areas = Http::withHeaders(['Ocp-Apim-Subscription-Key' => $header1])->get($req1)->json();
+
+        $AreaId = $areas[0]['AreaId'];
+
+        // dd($AreaId);
+
+        
+        $req = 'https://api.sportsdata.io/v3/soccer/scores/json/CompetitionDetails/' . $AreaId;
         $header = 'f7b0c7419d204f299f59e646b45ca563';
 
-        $areas = Http::withHeaders(['Ocp-Apim-Subscription-Key' => $header])->get($req)->json();
+        $comp = Http::withHeaders(['Ocp-Apim-Subscription-Key' => $header])->get($req)->json();
 
-        dd($areas);
+        dd($comp['CurrentSeason']['Rounds']);
 
         return view('areas.index', ['areas' => $areas]); 
     }
-
 
     /**
      * Show the form for creating a new resource.
@@ -54,7 +64,7 @@ class AreasController extends Controller
      */
     public function show($id)
     {
-        return view('show');
+        //
     }
 
     /**
