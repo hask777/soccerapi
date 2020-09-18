@@ -14,16 +14,36 @@ class AreasController extends Controller
      */
     public function index()
     {
-        $req = 'https://api.sportsdata.io/v3/soccer/scores/json/Areas';
-        $header = 'f7b0c7419d204f299f59e646b45ca563';
+        // $areasArray = Http::withHeaders(['Ocp-Apim-Subscription-Key'=>'f7b0c7419d204f299f59e646b45ca563'])->get('https://api.sportsdata.io/v3/soccer/scores/json/Areas')->json();
 
-        $areas = Http::withHeaders(['Ocp-Apim-Subscription-Key' => $header])->get($req)->json();
 
-        dd($areas);
+        $areas = Http::withHeaders(['Ocp-Apim-Subscription-Key'=>'f7b0c7419d204f299f59e646b45ca563'])->get('https://api.sportsdata.io/v3/soccer/scores/json/Areas')->json();
+        // dd($areasArray);
 
-        return view('areas.index', ['areas' => $areas]); 
+        // $comps = collect($areas)->mapWithKeys(function($comp){
+        //     return  [
+        //                // $comp['Competitions'] => $comp['Competitions'][0],
+        //                 // $area['Name'] => $area['Competitions']
+        //             ];
+        // });
+
+        foreach($areas as $area){
+            if(!empty($area['Competitions'])){
+                // dump($area['Competitions']);
+                foreach($area['Competitions'] as $competition){
+                    // dump($competition);
+                }
+            }         
+        }
+
+        // dd($areas);
+        
+        return  view('area', 
+        [
+            // 'areasArray' => $areasArray,
+            'areas' => $areas,
+        ]);
     }
-
 
     /**
      * Show the form for creating a new resource.
@@ -54,7 +74,35 @@ class AreasController extends Controller
      */
     public function show($id)
     {
-        return view('show');
+
+        $areasArray = Http::withHeaders(['Ocp-Apim-Subscription-Key'=>'f7b0c7419d204f299f59e646b45ca563'])->get('https://api.sportsdata.io/v3/soccer/scores/json/Areas')->json();
+
+        if(!empty($_GET['area_id'])){
+            $area_id = $_GET['area_id'];         
+        }
+
+        if(!empty($_GET['area_name'])){
+            $area_name = $_GET['area_name'];         
+        }
+
+        if(!empty($_GET['comp_id'])){
+            // $area_comp = json_decode($area_comp = $_GET['area_comp[]']);  
+            $comp_id = $_GET['comp_id'];      
+        }
+        
+        dd($comp_id);
+
+        // $competition = Http::withHeaders(['Ocp-Apim-Subscription-Key'=>'f7b0c7419d204f299f59e646b45ca563'])->get('https://api.sportsdata.io/v3/soccer/scores/json/CompetitionDetails/' . $area_id)->json();
+
+        // dd($areasArray);
+
+        return view('show', 
+            [
+                'areasArray' => $areasArray,
+                'area_id' => $area_id,
+                'area_name' => $area_name,
+                
+            ]);
     }
 
     /**

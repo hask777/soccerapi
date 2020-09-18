@@ -14,5 +14,5 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', 'AreasController@index');
-Route::get('/comp/{id}', 'AreasController@show');
+Route::get('/area/{id}', 'AreasController@show')->name('show');
 Route::get('/comp', 'CompetitionController@index');
